@@ -44,6 +44,8 @@ def sudoku(puzzle):
             elif type(dic[entry]) is list and len(dic[entry]) > 1: dic[entry] = 0
     solution = [[dic[str(j)+"-"+str(i)] for i in xrange(1,n+1)] for j in xrange(1,n+1)]
     for line in solution: print line
+    
+# Test Puzzles
 puzzle1 = [[5, 3, 0, 0, 7, 0, 0, 0, 0],
           [6, 0, 0, 1, 9, 5, 0, 0, 0],
           [0, 9, 8, 0, 0, 0, 0, 6, 0],
