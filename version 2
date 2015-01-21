@@ -4,10 +4,10 @@ from math import sqrt
 
 def sudoku(puzzle):
     n = len(puzzle)
-    # Builds Dictionary with board position and value
+# Builds Dictionary with board position and value
     dic = {str(i+1) + '-' + str(j+1): puzzle[i][j] for i in xrange(0, n) for j in xrange(0, n)}
     # Builds list of each possible value for all empty (0) spaces, only considers row and column possibilities
-    for y in range(0, 10): # This is a clunky way to iterate the process, a while would be better
+    while 0 in dic.values():
         for entry in dic:
             if dic[entry] == 0:
                 temp1 = []
@@ -66,4 +66,4 @@ puzzle3 = [[3,4,1,0],
            [0,2,0,0],
            [0,0,2,0],
            [0,1,4,3]]
-sudoku(puzzle3)
+#sudoku(puzzle1)
