@@ -1,0 +1,94 @@
+# Solves 9x9 Sudokus by building a list of possible values for every blank (0) space, square will refer to the sqrt(n)
+# square containing the value. Could take arbitrary size arrays if the script for checking squares was redone.
+# Takes input as a list of lists where the lists are the rows of the puzzle ordered top to bottom
+# Should be able to solve any 9x9 sudoku with at least 17 defined squares (minimum number to define unique solution)
+# Could be simplified considerably, particularly the portion dealing with values in squares
+
+def sudoku(puzzle):
+    n = len(puzzle)
+    dic = {}
+# Builds Dictionary with board position and value
+    for i in xrange(0, n):
+        for j in xrange(0, n):
+            dic[str(i+1) + '-' + str(j+1)] = puzzle[i][j]
+    # Builds list of each possible value for all empty (0) spaces, only considers row and column possibilities
+    for y in range(0, 10):
+        for entry in dic:
+            if dic[entry] == 0:
+                temp1 = []
+                temp2 = []
+                temp3 = []
+                for entry1 in dic:
+                    if entry1[0] == entry[0]: temp1.append(dic[entry1])
+                    if entry1[-1] == entry[-1]: temp2.append(dic[entry1])
+                for i in xrange(1,10):
+                    if i not in temp1 and i not in temp2: temp3.append(i)
+                dic[entry] = temp3
+    # populates dictionary with invalid spaces in each square, works on 9x9 only
+        sqrdic = {'31': [], '32': [], '33': [], '11': [], '12': [], '13': [], '21': [], '22': [], '23': []}
+
+        for entry in dic:
+            if len(str(dic[entry])) == 1:
+                if int(entry[0]) <= 3:
+                    if int(entry[-1]) <= 3: sqrdic['11'].append(dic[entry])
+                    if 3 < int(entry[-1]) <= 6: sqrdic['12'].append(dic[entry])
+                    if 6 < int(entry[-1]) <= 9: sqrdic['13'].append(dic[entry])
+                if 3 < int(entry[0]) <= 6:
+                    if int(entry[-1]) <= 3: sqrdic['21'].append(dic[entry])
+                    if 3 < int(entry[-1]) <= 6: sqrdic['22'].append(dic[entry])
+                    if 6 < int(entry[-1]) <= 9: sqrdic['23'].append(dic[entry])
+                if 6 < int(entry[0]) <= 9:
+                    if int(entry[-1]) <= 3: sqrdic['31'].append(dic[entry])
+                    if 3 < int(entry[-1]) <= 6: sqrdic['32'].append(dic[entry])
+                    if 6 < int(entry[-1]) <= 9: sqrdic['33'].append(dic[entry])
+        # Removes invalid choices based on values in the square
+        for entry in dic:
+            if len(str(dic[entry])) > 1:  # only looking at spaces with multiple possible values
+                if int(entry[0]) <= 3:
+                    if int(entry[-1]) <= 3:
+                        for i in sqrdic['11']:
+                            if i in dic[entry]: dic[entry].remove(i)
+                    if 3 < int(entry[-1]) <= 6:
+                        for i in sqrdic['12']:
+                            if i in dic[entry]: dic[entry].remove(i)
+                    if 6 < int(entry[-1]) <= 9:
+                        for i in sqrdic['13']:
+                            if i in dic[entry]: dic[entry].remove(i)
+                if 3 < int(entry[0]) <= 6:
+                    if int(entry[-1]) <= 3:
+                        for i in sqrdic['21']:
+                            if i in dic[entry]: dic[entry].remove(i)
+                    if 3 < int(entry[-1]) <= 6:
+                        for i in sqrdic['22']:
+                            if i in dic[entry]: dic[entry].remove(i)
+                    if 6 < int(entry[-1]) <= 9:
+                        for i in sqrdic['23']:
+                            if i in dic[entry]: dic[entry].remove(i)
+                if 6 < int(entry[0]) <= 9:
+                    if int(entry[-1]) <= 3:
+                        for i in sqrdic['31']:
+                            if i in dic[entry]: dic[entry].remove(i)
+                    if 3 < int(entry[-1]) <= 6:
+                        for i in sqrdic['32']:
+                            if i in dic[entry]: dic[entry].remove(i)
+                    if 6 < int(entry[-1]) <= 9:
+                        for i in sqrdic['33']:
+                            if i in dic[entry]: dic[entry].remove(i)
+        for entry in dic:
+            if type(dic[entry]) is list and len(dic[entry]) == 1:
+                dic[entry] = int(dic[entry][0])
+            elif type(dic[entry]) is list and len(dic[entry]) > 1: dic[entry] = 0
+    solution = [[dic[str(j)+"-"+str(i)] for i in xrange(1,10)] for j in xrange(1,10)]
+    for line in solution: print line
+  
+# Sample Puzzle
+puzzle = [[5, 3, 0, 0, 7, 0, 0, 0, 0],
+          [6, 0, 0, 1, 9, 5, 0, 0, 0],
+          [0, 9, 8, 0, 0, 0, 0, 6, 0],
+          [8, 0, 0, 0, 6, 0, 0, 0, 3],
+          [4, 0, 0, 8, 0, 3, 0, 0, 1],
+          [7, 0, 0, 0, 2, 0, 0, 0, 6],
+          [0, 6, 0, 0, 0, 0, 2, 8, 0],
+          [0, 0, 0, 4, 1, 9, 0, 0, 5],
+          [0, 0, 0, 0, 8, 0, 0, 7, 9]]
+# sudoku(puzzle)
